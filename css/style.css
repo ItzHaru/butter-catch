@@ -1,0 +1,11 @@
+.bg-yellow {
+    background-color: rgb(254, 220, 0)!important;
+  }
+
+canvas {  
+    border: 1px solid black;
+  }
+
+.bg-dark {
+  background-color: rgb(29, 29, 29) !important;
+}
