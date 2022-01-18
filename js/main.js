@@ -36,10 +36,10 @@ class Character {
         } else {
             sprint = 7;
         }
-        if (keyIsDown(keyIsDown(65))) {
+        if (keyIsDown(65)) {
             if (this.x > 0) this.x -= sprint;
         }
-        if (keyIsDown(keyIsDown(68))) {
+        if (keyIsDown(68)) {
             if (this.x < width - this.w) this.x += sprint;
         }
     }
