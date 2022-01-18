@@ -12,13 +12,25 @@
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 
+    <!-- icon -->
+    <link rel="icon" href="img/butter-icon.png">
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
   </head>
   <body class="bg-dark">
       <header>
         <h1 class="text-center bg-yellow container-fluid p-4"><b>Butter catch!</b></h1>
       </header>
-      <main class="container text-center">
-        <div id="mycanvas"></div>
+      <main class="row">
+        <div class="ml-3 text-white col-md-2">
+          Movement: A, D, <i class="fal fa-arrow-left"></i> , <i class="fal fa-arrow-right"></i>
+          <p>Sprint: shift</p>
+        </div>
+        <div class="text-center text-right col-md-8" id="mycanvas"></div>
+        <div class="text-white col-md-1" id="score">
+          0x <img src="img/butter-score.png" alt="butter">
+        </div>
       </main>  
       <footer class="text-center bg-yellow container-fluid p-3">
         &copy; 2022 - Růženka Perinová IT2

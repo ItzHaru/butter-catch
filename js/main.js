@@ -1,10 +1,15 @@
 let canvas, character, characterImage, butterImage;
 let time = 0;
 let sprint = 7;
+let butterscore = 0;
+let end = false;
 let butter = [];
+let dynamite = [];
 
+/* Preload obrázků */
 function preload() {
     butterImage = loadImage("img/butter.png");
+    dynamiteImage = loadImage("img/dynamite.png");
     rjImage = loadImage("img/rj.png");
 }
 
@@ -24,7 +29,7 @@ class Character {
         this.h = 0;
         this.angle = 0;
     }
-
+    /* pohyb postavy */
     move() {
         if (keyIsDown(16)) {
             sprint = 15;
@@ -39,6 +44,7 @@ class Character {
         }
     }
 
+    /* kolize */
     detectCollision(butter) {
         return collideRectRect(
             this.x,
@@ -65,7 +71,7 @@ class Character {
 /* Butter */
 class Butter {
     constructor() {
-        this.size = random(50, 100);
+        this.size = random(100, 50);
         this.y = - 100;
         this.x = random(this.size, width - this.size);
         this.speed = random(2, 5);
@@ -81,6 +87,25 @@ class Butter {
     }
 }
 
+/* Dynamite */
+class Dynamite {
+    constructor() {
+        this.size = random(50, 100);
+        this.y = - 100;
+        this.x = random(this.size, width - this.size);
+        this.speed = random(2, 5);
+    }
+
+    move() {
+        this.y += this.speed;
+    }
+
+    draw() {
+        this.move();
+        image(dynamiteImage, this.x, this.y, this.size, this.size);
+    }
+}
+
 /* Funkce pro základní nastavení aplikace v P5 JS */
 function setup() {
     canvas = createCanvas(1000, 600);
@@ -91,25 +116,56 @@ function setup() {
 /* Funkce, která vykresluje objekty na canvas 60x za sekundu */
 function draw() {
     time++;
-    background(80,80,80);
-    character.draw();
+    if (!end) {
+        background(80, 80, 80);
+        character.draw();
+        /* Butter spawn */
+        if (time % 77 == 0) {
+            butter.push(new Butter());
+        }
 
-    /* Butter spawn */
-    if (time % 77 == 0) {
-        butter.push(new Butter());
+        butter.forEach(function (butter, index, array) {
+            butter.draw();
+            if (character.detectCollision(butter)) {
+                array.splice(index, 1);
+                butterscore++;
+                score();
+            }
+
+            if (butter.y > height) {
+                array.splice(index, 1);
+            }
+        });
+
+        /* Dynamite spawn */
+        if (time % 200 == 0) {
+            dynamite.push(new Dynamite());
+        }
+
+        dynamite.forEach(function (dynamite, index, array) {
+            dynamite.draw();
+            if (character.detectCollision(dynamite)) {
+                array.splice(index, 1);
+                dead();
+            }
+
+            if (dynamite.y > height) {
+                array.splice(index, 1);
+            }
+        });
     }
-
-    butter.forEach(function (butter, index, array) {
-        butter.draw();
-        if (character.detectCollision(butter)) {
-            array.splice(index, 1);
-        }
-
-        if (butter.y > height) {
-            array.splice(index, 1);
-        }
-    })
 }
 
+function score() {
+    const div = document.getElementById('score');
+    div.innerHTML = `${butterscore}x <img src="img/butter-score.png" alt="butter">`
+}
 
-
+function dead() {
+    end = true;
+    background(0);
+    fill(255);
+    textSize(50);
+    textStyle(BOLD);
+    text('You lose', width / 2 - 115, height / 2);
+}
