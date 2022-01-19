@@ -44,7 +44,7 @@ class Character {
         }
     }
 
-    /* kolize */
+    /* kolize postavy s máslem */
     detectCollision(butter) {
         return collideRectRect(
             this.x,
@@ -58,11 +58,11 @@ class Character {
         );
     }
 
+    /* vykreslení postavy */
     draw() {
         this.move();
         push();
         translate(this.x + 20, this.y + 40);
-        rotate(((2 * PI) / 360) * this.angle);
         image(rjImage, -20, -40);
         pop();
     }
@@ -77,10 +77,12 @@ class Butter {
         this.speed = random(2, 5);
     }
 
+    /* Rychlost padání másla */
     move() {
         this.y += this.speed;
     }
 
+    /* Vykreslení másla */
     draw() {
         this.move();
         image(butterImage, this.x, this.y, this.size, this.size);
@@ -96,24 +98,26 @@ class Dynamite {
         this.speed = random(2, 5);
     }
 
+    /* Rychlost padání dynamitu */
     move() {
         this.y += this.speed;
     }
 
+    /* Vykreslení dynamitu */
     draw() {
         this.move();
         image(dynamiteImage, this.x, this.y, this.size, this.size);
     }
 }
 
-/* Funkce pro základní nastavení aplikace v P5 JS */
+/* Základní nastavení aplikace v P5 JS */
 function setup() {
     canvas = createCanvas(1000, 600);
     canvas.parent("mycanvas");
     character = new Character(width - 550, height - 120);
 }
 
-/* Funkce, která vykresluje objekty na canvas 60x za sekundu */
+/* Vykreslení canvasu */
 function draw() {
     time++;
     if (!end) {
@@ -124,6 +128,7 @@ function draw() {
             butter.push(new Butter());
         }
 
+        /* Když postava chytí máslo - máslo zmizí a přičte se 1 skóre */
         butter.forEach(function (butter, index, array) {
             butter.draw();
             if (character.detectCollision(butter)) {
@@ -138,10 +143,11 @@ function draw() {
         });
 
         /* Dynamite spawn */
-        if (time % 200 == 0) {
+        if (time % 150 == 0) {
             dynamite.push(new Dynamite());
         }
 
+        /* Když postava chytí dynamit - dynamit zmizí a hra se ukončí */
         dynamite.forEach(function (dynamite, index, array) {
             dynamite.draw();
             if (character.detectCollision(dynamite)) {
@@ -156,16 +162,19 @@ function draw() {
     }
 }
 
+/* Funkce na přepisování skóre */
 function score() {
     const div = document.getElementById('score');
     div.innerHTML = `${butterscore}x <img src="img/butter-score.png" alt="butter">`
 }
 
+/* Funkce na vykreslení konec hry */
 function dead() {
     end = true;
     background(0);
     fill(255);
     textSize(50);
     textStyle(BOLD);
-    text('You lose', width / 2 - 115, height / 2);
+    text('You lose :(', width / 2 - 115, height / 2);
+    text('Click F5 to restart the game', width / 2 - 310, height / 2 + 77);
 }
